@@ -1,16 +1,20 @@
 import yfinance as yf
 
-def download_data():
 
-    data = yf.download(
-        "AAPL",
-        start="2020-01-01",
-        end="2024-01-01"
-    )
+def fetch_data():
 
-    data.to_csv("data/stock_data.csv")
+    ticker = "AAPL"
+    start_date = "2020-01-01"
+    end_date = "2024-01-01"
 
-    print("Data downloaded")
+    print("Downloading market data...")
+
+    df = yf.download(ticker, start=start_date, end=end_date)
+
+    df.to_csv("data/stock_data.csv")
+
+    print("Saved data to data/stock_data.csv")
+
 
 if __name__ == "__main__":
-    download_data()
+    fetch_data()

@@ -1,18 +1,22 @@
 import pandas as pd
 
-def moving_average_strategy(data):
 
-    signals = pd.DataFrame(index=data.index)
+def moving_average_strategy(price_data):
 
-    signals["price"] = data["Close"]
+    df = pd.DataFrame(index=price_data.index)
 
-    signals["short_ma"] = data["Close"].rolling(window=20).mean()
-    signals["long_ma"] = data["Close"].rolling(window=50).mean()
+    df["price"] = price_data["Close"]
 
-    signals["signal"] = 0
+    # simple moving averages
+    df["ma_short"] = price_data["Close"].rolling(20).mean()
+    df["ma_long"] = price_data["Close"].rolling(50).mean()
 
-    signals.loc[signals["short_ma"] > signals["long_ma"], "signal"] = 1
+    # trading signal
+    df["signal"] = 0
 
-    signals["positions"] = signals["signal"].diff()
+    df.loc[df["ma_short"] > df["ma_long"], "signal"] = 1
 
-    return signals
+    # detect signal changes
+    df["trade"] = df["signal"].diff()
+
+    return df
